@@ -181,7 +181,7 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 				}
 
 				wp_dropdown_categories( array(
-					'show_option_all' =>  __( "Show {$taxonomy_object->labels->all_items}" ),
+					'show_option_all' =>  $taxonomy_object->labels->all_items,
 					'taxonomy'        =>  $taxonomy,
 					'name'            =>  $taxonomy,
 					'orderby'         =>  'name',
