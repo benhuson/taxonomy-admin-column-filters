@@ -131,7 +131,7 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 	 */
 	private function get_taxonomies( $post_type ) {
 
-		return apply_filters( 'taxonomy_admin_column_filters_taxonomies', get_object_taxonomies( $post_type, 'objects' ), $post_type );
+		return apply_filters( 'taxonomy_admin_column_filters_taxonomies', get_object_taxonomies( $post_type ), $post_type );
 
 	}
 
@@ -147,17 +147,25 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 
 		$taxonomies = $this->get_admin_edit_screen_taxonomies();
 
-		foreach ( $taxonomies as $taxonomy => $taxonomy_object ) {
+		foreach ( $taxonomies as $taxonomy ) {
 
-			$term = get_term_by( 'slug', $wp_query->query[ $taxonomy ], $taxonomy );
+			$taxonomy_object = get_taxonomy( $taxonomy );
+
+			// Selected
+			if ( isset( $wp_query->query[ $taxonomy ] ) && ! empty( $wp_query->query[ $taxonomy ] ) ) {
+				$term = get_term_by( 'slug', $wp_query->query[ $taxonomy ], $taxonomy );
+				$selected = $term->slug;
+			} else {
+				$selected = '';
+			}
 
 			wp_dropdown_categories( array(
-				'show_option_all' =>  __( "Show All {$taxonomy_object->label}" ),
+				'show_option_all' =>  __( "Show {$taxonomy_object->labels->all_items}" ),
 				'taxonomy'        =>  $taxonomy,
 				'name'            =>  $taxonomy,
 				'orderby'         =>  'name',
 				'value_field'     => 'slug',
-				'selected'        =>  $term->slug,
+				'selected'        =>  $selected,
 				'hierarchical'    =>  true,
 				'depth'           =>  3,
 				'show_count'      =>  true,   // Show number of items in term
