@@ -116,7 +116,7 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 		$post_types[] = 'page';
 		$post_types[] = 'post';
 
-		return $post_types;
+		return apply_filters( 'taxonomy_admin_column_filters_post_types', $post_types );
 
 	}
 
@@ -131,7 +131,7 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 	 */
 	private function get_taxonomies( $post_type ) {
 
-		return get_object_taxonomies( $post_type, 'objects' );
+		return apply_filters( 'taxonomy_admin_column_filters_taxonomies', get_object_taxonomies( $post_type, 'objects' ), $post_type );
 
 	}
 
