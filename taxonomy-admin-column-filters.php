@@ -35,11 +35,6 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 	public function setup_admin_screen_hooks() {
 
 		if ( $this->is_admin_edit_screen() ) {
-			add_screen_option( 'layout_columns',  array(
-				'label' => __('Members per page', 'pippin'),
-				'default' => 10,
-				'option' => 'pippin_per_page'
-			) );
 			add_action( 'restrict_manage_posts', array( $this, 'admin_posts_tax_filter_menu' ) );
 		}
 
