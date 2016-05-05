@@ -2,6 +2,7 @@
 
 /*
 Plugin Name: Taxonomy Admin Column Filters
+Plugin URI:  https://github.com/benhuson/taxonomy-admin-column-filters
 Description: Framework for adding a taxonomy filter menus to post listings in admin.
 Version:     0.1
 License:     GPL2
