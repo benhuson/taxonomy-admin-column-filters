@@ -126,7 +126,14 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 	 */
 	private function get_taxonomies( $post_type ) {
 
-		return apply_filters( 'taxonomy_admin_column_filters_taxonomies', get_object_taxonomies( $post_type ), $post_type );
+		$taxonomies = get_object_taxonomies( $post_type );
+
+		// Posts have builtin support for category filter so remove
+		if ( 'post' == $post_type && in_array( 'category', $taxonomies ) ) {
+			$taxonomies = array_diff( $taxonomies, array( 'category' ) );
+		}
+
+		return apply_filters( 'taxonomy_admin_column_filters_taxonomies', $taxonomies, $post_type );
 
 	}
 
