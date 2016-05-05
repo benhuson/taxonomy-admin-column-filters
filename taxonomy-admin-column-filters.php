@@ -8,7 +8,7 @@ Version:     0.1
 License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Domain Path: /languages
-Text Domain: taxonomy-admin-column-filter
+Text Domain: taxonomy-admin-column-filters
 */
 
 class Taxonomy_Admin_Column_Filters_Plugin {
