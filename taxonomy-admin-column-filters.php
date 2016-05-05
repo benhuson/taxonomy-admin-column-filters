@@ -136,6 +136,25 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 	}
 
 	/**
+	 * Taxonomy Has Terms
+	 *
+	 * @since   0.1
+	 * @access  private
+	 *
+	 * @param   string  $taxonomy  Taxonomy.
+	 * @return  boolean
+	 */
+	private function taxonomy_has_terms( $taxonomy ) {
+
+		$terms = get_terms( $taxonomy, array(
+			'hide_empty' => false,
+		) );
+
+		return $terms && ! is_wp_error( $terms );
+
+	}
+
+	/**
 	 * Add a collection filter menu to the custom post type overview admin page
 	 *
 	 * @since   0.1
@@ -149,28 +168,32 @@ class Taxonomy_Admin_Column_Filters_Plugin {
 
 		foreach ( $taxonomies as $taxonomy ) {
 
-			$taxonomy_object = get_taxonomy( $taxonomy );
+			if ( $this->taxonomy_has_terms( $taxonomy ) ) {
 
-			// Selected
-			if ( isset( $wp_query->query[ $taxonomy ] ) && ! empty( $wp_query->query[ $taxonomy ] ) ) {
-				$term = get_term_by( 'slug', $wp_query->query[ $taxonomy ], $taxonomy );
-				$selected = $term->slug;
-			} else {
-				$selected = '';
+				$taxonomy_object = get_taxonomy( $taxonomy );
+
+				// Selected
+				if ( isset( $wp_query->query[ $taxonomy ] ) && ! empty( $wp_query->query[ $taxonomy ] ) ) {
+					$term = get_term_by( 'slug', $wp_query->query[ $taxonomy ], $taxonomy );
+					$selected = $term->slug;
+				} else {
+					$selected = '';
+				}
+
+				wp_dropdown_categories( array(
+					'show_option_all' =>  __( "Show {$taxonomy_object->labels->all_items}" ),
+					'taxonomy'        =>  $taxonomy,
+					'name'            =>  $taxonomy,
+					'orderby'         =>  'name',
+					'value_field'     => 'slug',
+					'selected'        =>  $selected,
+					'hierarchical'    =>  true,
+					'depth'           =>  3,
+					'show_count'      =>  true,   // Show number of items in term
+					'hide_empty'      =>  false,  // Don't show terms w/o listings
+				) );
+
 			}
-
-			wp_dropdown_categories( array(
-				'show_option_all' =>  __( "Show {$taxonomy_object->labels->all_items}" ),
-				'taxonomy'        =>  $taxonomy,
-				'name'            =>  $taxonomy,
-				'orderby'         =>  'name',
-				'value_field'     => 'slug',
-				'selected'        =>  $selected,
-				'hierarchical'    =>  true,
-				'depth'           =>  3,
-				'show_count'      =>  true,   // Show number of items in term
-				'hide_empty'      =>  false,  // Don't show terms w/o listings
-			) );
  
 		}
 
